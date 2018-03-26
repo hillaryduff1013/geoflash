@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <style>
+            #geoflashlight_map {
+                width: 100%;
+                height: 80%;
+                background-color: grey;
+            }
+        </style>
+        <title>GeoFlashlight</title>
+            <meta name="HandheldFriendly" content="True">
+            <meta name="MobileOptimized" content="320"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        
+        <script>
+            var light = new Array(); 
+                light[0] = 'black';
+                light[1] = 'white'; 
+                light[2] = 'red';
+                light[3] = 'blue';
+            function flip(whichway){		
+                //alert("At flip");
+                document.body.style.backgroundColor = light[whichway]; 
+            }
+            function getRandomColor() {
+                //alert("At getRandomColor");
+              // creating a random number between 0 and 255
+              var r = Math.floor(Math.random() * 256);
+              var g = Math.floor(Math.random() * 256);
+              var b = Math.floor(Math.random() * 256);
+
+              // going from decimal to hex
+              var hexR = r.toString(16);
+              var hexG = g.toString(16);
+              var hexB = b.toString(16);
+
+              // making sure single character values are prepended with a "0"
+              if (hexR.length == 1) {
+                hexR = "0" + hexR;
+              }
+
+              if (hexG.length == 1) {
+                hexG = "0" + hexG;
+              }
+
+              if (hexB.length == 1) {
+                hexB = "0" + hexB;
+              }
+
+              // creating the hex value by concatenatening the string values
+              var hexColor = "#" + hexR + hexG + hexB;
+
+                document.body.style.backgroundColor = hexColor;
+              //return hexColor.toUpperCase();
+            }
+        </script> 
+
+    </head>
+    <body>
+                <p>
+        <h4>1) Choose a button below to choose a predetermined colour. </h4>
+        <h4>2) In order to have a colour chosen for you, zoom in and out of the map in order to choose your preferred location. Then click the 'Random' button to have a random colour chosen for you. </h4>
+        </p>
+    
+            <input type="button" value="OFF" onclick="flip(0);"> 
+            <input type="button" value="ON"  onclick="flip(1);">
+            <input type="button" value="RED" onclick="flip(2);">
+            <input type="button" value="BLUE" onclick="flip(3);">
+            <input type="button" value="RANDOM" onclick="getRandomColor();">
+    <br>
+    <br>
+    <br>
+    
+        <div id="geoflashlight_map"></div>
+          <form>
+          Select an emoji
+             <select id="icon_to_use">
+                <option value="sunglasses.png">Sunglasses</option>
+                <option value="mindblown.png">Mind Blown</option>
+             </select>
+          </form>
+        <script>
+            var geoflashlight_map;
+            function initMap() {
+                geoflashlight_map = new google.maps.Map(document.getElementById('geoflashlight_map'), {
+                zoom: 18,
+                center: {lat: 43.667731, lng: -79.826513}
+                });
+                
+                geoflashlight_map.addListener('click', function(e) {
+                var location = e.latLng;
+                place_marker(location);
+                });
+            }
+            
+            function place_marker(location){
+                var emoji= document.getElementById('icon_to_use').value
+                var marker = new google.maps.Marker({
+                position: location,
+                map: geoflashlight_map, 
+                icon:emoji
+                });
+                console.log(location.lat()+ " " + location.lng()+ " "+ emoji);
+          }
+</script>
+          <script async defer
+               src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBB1sXBR-CIkyWAjxDunHx05FhbujkbGvE&callback=initMap">
+          </script>
+    </body>
+</html>
